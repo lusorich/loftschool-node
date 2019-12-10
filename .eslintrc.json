@@ -1,0 +1,11 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+    },
+    "extends": "standart",
+    "rules": {
+        "no-extra-semi": "error",
+        "semi": [2, "always"]
+    }
+}
