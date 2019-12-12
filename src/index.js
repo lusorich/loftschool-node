@@ -10,14 +10,8 @@ const funcRec = (myDir, newDir) => {
       console.log('FUCKING ERROR, MY FRIEND');
     }
 
-<<<<<<< HEAD
     files.forEach(file => {
       let stat = fs.statSync(path.resolve(myDir, file));
-=======
-  files.forEach(file => {
-    console.log(path.basename(file)[0]);
-    let stat = fs.statSync(path.resolve(myDir, file));
->>>>>>> a1a5feddbe77299fcd1d3a6496213db87a8c6f95
 
       if (stat.isFile() === true) {
         console.log(`file is ${file}`);
