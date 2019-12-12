@@ -1,0 +1,6 @@
+      fs.link(path.resolve(myDir, file), "C:/loftschool-node/src/music/hey.mp3", err => {
+        if (err.code === "EEXIST") {
+          return "File exist";
+        }
+        console.log(err);
+      });

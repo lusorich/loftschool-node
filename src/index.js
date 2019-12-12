@@ -1,25 +1,30 @@
 const fs = require("fs");
 const path = require("path");
 
-const myDir = "C:/loftschool-node/src/music";
+let myDir = "C:/loftschool-node/src/music";
+let newDir = "C:/loftschool-node/src/sorted";
 
-fs.readdir(myDir, (err, files) => {
-  if (err) {
-    console.log("FUCKING ERROR");
-  }
-
-  files.forEach(file => {
-    console.log(file);
-    console.log(path.basename(file));
-    let stat = fs.statSync(path.resolve(myDir, file));
-
-    if (stat.isFile() === true) {
-      fs.link(path.resolve(myDir, file), "C:/loftschool-node/src/music/hey.mp3", err => {
-        if (err.code === "EEXIST") {
-          return "File exist";
-        }
-        console.log(err);
-      });
+const funcRec = (myDir, newDir) => {
+  fs.readdir(myDir, (err, files) => {
+    if (err) {
+      console.log('FUCKING ERROR, MY FRIEND');
     }
+
+    files.forEach(file => {
+      let stat = fs.statSync(path.resolve(myDir, file));
+
+      if (stat.isFile() === true) {
+        console.log(`file is ${file}`);
+        fs.copyFile(path.join(myDir, file), path.join(newDir, file), err => {console.log(err)})
+      }
+      if (stat.isDirectory() === true) {
+        console.log(`directory is ${file}`);
+
+        myDirInner = path.join(myDir, file);
+        funcRec(myDirInner, newDir)
+      }
+    });
   });
-});
+};
+
+funcRec(myDir, newDir);
