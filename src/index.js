@@ -9,8 +9,7 @@ fs.readdir(myDir, (err, files) => {
   }
 
   files.forEach(file => {
-    console.log(file);
-    console.log(path.basename(file));
+    console.log(path.basename(file)[0]);
     let stat = fs.statSync(path.resolve(myDir, file));
 
     if (stat.isFile() === true) {
