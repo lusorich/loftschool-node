@@ -1,30 +1,65 @@
 const fs = require("fs");
 const path = require("path");
 
-let myDir = "C:/loftschool-node/src/music";
-let newDir = "C:/loftschool-node/src/sorted";
+let myDir,
+  newDir,
+  needDelete = false,
+  dirArray = [];
 
-const funcRec = (myDir, newDir) => {
+process.argv.forEach((arg, index, array) => {
+  if (arg === "--default") {
+    myDir = array[index + 1];
+    dirArray.push(myDir);
+  } else if (arg === "--target") {
+    newDir = array[index + 1];
+  } else if (arg === "--delete") {
+    needDelete = true;
+  }
+});
+
+const funcRec = (myDir, newDir, dirArray) => {
   fs.readdir(myDir, (err, files) => {
     if (err) {
-      console.log('FUCKING ERROR, MY FRIEND');
+      console.log("ERROR, MY FRIEND");
     }
 
     files.forEach(file => {
       let stat = fs.statSync(path.resolve(myDir, file));
 
       if (stat.isFile() === true) {
-        console.log(`file is ${file}`);
-        fs.copyFile(path.join(myDir, file), path.join(newDir, file), err => {console.log(err)})
+        let newPath = path.join(newDir, path.basename(file)[0]);
+        fs.mkdir(newPath, err => {
+          if (err.code === "EEXIST") {
+            console.log("Данная папка уже существует");
+          } else {
+            console.log(err);
+          }
+          fs.copyFile(path.join(myDir, file), path.join(newPath, file), err => {
+            if (needDelete) {
+              fs.unlink(path.join(myDir, file), err => {
+                console.log(err);
+              });
+            }
+          });
+        });
       }
       if (stat.isDirectory() === true) {
-        console.log(`directory is ${file}`);
-
-        myDirInner = path.join(myDir, file);
-        funcRec(myDirInner, newDir)
+        if (needDelete) {
+          if (dirArray.includes(path.join(myDir, file)) === false)
+            dirArray.push(path.join(myDir, file));
+        }
+        funcRec(path.join(myDir, file), newDir, dirArray);
       }
     });
   });
+  console.log(dirArray);
+  setTimeout(() => delDir(dirArray), 5000);
 };
 
-funcRec(myDir, newDir);
+function delDir(dirArray) {
+  for (let i = dirArray.length - 1; i >= 0; i--) {
+    fs.rmdirSync(dirArray[i]);
+  }
+}
+
+funcRec(myDir, newDir, dirArray);
