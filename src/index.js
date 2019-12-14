@@ -44,9 +44,8 @@ const funcRec = (myDir, newDir, dirArray) => {
         });
       }
       if (stat.isDirectory() === true) {
-        if (needDelete) {
-          if (dirArray.includes(path.join(myDir, file)) === false)
-            dirArray.push(path.join(myDir, file));
+        if (needDelete && dirArray.includes(path.join(myDir, file)) === false) {
+          dirArray.push(path.join(myDir, file));
         }
         funcRec(path.join(myDir, file), newDir, dirArray);
       }
