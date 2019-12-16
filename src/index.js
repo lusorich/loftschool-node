@@ -42,11 +42,6 @@ const fileSort = (myDir, newDir, dirArray) => {
       }
     }
     if (stat.isDirectory()) {
-      //если стоит флаг delete, то формируем массив со всеми папками, проверяем чтобы папки не дублировались
-      //на случай если в 1й папке несколько файлов
-      if (needDelete && !dirArray.includes(path.join(myDir, file))) {
-        dirArray.push(path.join(myDir, file));
-      }
       //если элемент это директория, вызываем заново функцию с новым путем
       fileSort(path.join(myDir, file), newDir, dirArray);
     }
