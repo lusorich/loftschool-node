@@ -24,6 +24,7 @@ process.argv.forEach((arg, index, array) => {
 
 const fileSort = (myDir, newDir, dirArray) => {
   //читаем переданную директорую
+
   const syncDir = fs.readdirSync(myDir);
   //проходимся по всем элементам в папке
   syncDir.forEach(file => {
@@ -52,6 +53,7 @@ const fileSort = (myDir, newDir, dirArray) => {
     }
   });
   if (needDelete) {
+    console.log(myDir);
     fs.rmdirSync(myDir);
   }
 };
