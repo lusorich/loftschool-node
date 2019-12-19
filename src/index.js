@@ -26,10 +26,15 @@ process.argv.forEach((arg, index, array) => {
 });
 
 const server = http.createServer((req, res) => {
-  const { url, method } = req;
-  if (url === "/start" && method === "GET") {
-    console.log(interval);
-    return res.end();
+  const { method } = req;
+  if (method === "GET") {
+    let dateStart = new Date();
+    console.log(`Начальная дата это ${dateStart}`);
+    let int = setInterval(() => {
+      let date = new Date();
+      console.log(date);
+      console.log(date.toUTCString());
+    }, interval);
   }
 });
 
