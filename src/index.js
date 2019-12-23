@@ -13,7 +13,9 @@ process.argv.forEach((arg, index, array) => {
   } else if (arg === "--target") {
     newDir = array[index + 1];
     if (!isDirExist(newDir)) {
-      fs.mkdirSync(newDir);
+      fs.mkdir(newDir, err => {
+        console.log("err");
+      });
     }
   } else if (arg === "--delete") {
     needDelete = true;
@@ -22,35 +24,62 @@ process.argv.forEach((arg, index, array) => {
 
 const fileSort = (myDir, newDir) => {
   //читаем переданную директорую
-  const syncDir = fs.readdirSync(myDir);
   //проходимся по всем элементам в папке
-  syncDir.forEach(file => {
-    let stat = fs.statSync(path.resolve(myDir, file));
-    //если элемент файл, создаем директорию по первой букве
-    if (stat.isFile()) {
-      let newPath = path.join(newDir, path.basename(file)[0]);
-      if (!isDirExist(newPath)) {
-        fs.mkdirSync(newPath);
-      }
-      //копируем файл в новую директорию
-      fs.copyFileSync(path.join(myDir, file), path.join(newPath, file));
-      //если есть флаг delete, после копирования сразу удаляем файл
-      if (needDelete) {
-        fs.unlinkSync(path.join(myDir, file));
-      }
+  fs.readdir(myDir, (err, files) => {
+    if (err) {
+      console.log("Some error");
     }
-    if (stat.isDirectory()) {
-      //если элемент это директория, вызываем заново функцию с новым путем
-      fileSort(path.join(myDir, file), newDir);
-    }
+    files.forEach(file => {
+      let stat = fs.statSync(path.resolve(myDir, file));
+      //если элемент файл, создаем директорию по первой букве
+      if (stat.isFile()) {
+        promise(newDir, file)
+          .then((newPath) => {
+            if (!isDirExist(newPath)) {
+              fs.mkdir(newPath, err => {
+                console.log("error");
+              });
+            }
+          })
+          .then(() => {
+            fs.copyFile(
+              path.join(myDir, file),
+              path.join(newPath, file),
+              err => {
+                console.log("error");
+              }
+            );
+          })
+          .then(() => {
+            if (needDelete) {
+              fs.unlink(path.join(myDir, file), err => {
+                console.log("some error");
+              });
+            }
+            if (needDelete) {
+              fs.rmdir(myDir, err => {
+                console.log(err);
+              });
+            }
+          });
+      }
+      if (stat.isDirectory()) {
+        //если элемент это директория, вызываем заново функцию с новым путем
+        fileSort(path.join(myDir, file), newDir);
+      }
+    });
   });
-  if (needDelete) {
-    fs.rmdirSync(myDir);
-  }
 };
 //проверка на существование
 function isDirExist(path) {
   return fs.existsSync(path);
 }
+
+const promise = (newDir, file) => {
+  return new Promise((resolve, reject) => {
+    let newPath = path.join(newDir, path.basename(file)[0]);
+    return newPath;
+  });
+};
 
 fileSort(myDir, newDir);
