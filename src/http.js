@@ -19,11 +19,9 @@ const server = http.createServer((req, res) => {
 
 const promise = res => {
   return new Promise((resolve, reject) => {
-    let dateStart = new Date();
-    console.log(`Начальная дата это ${dateStart}`);
+    console.log(`Начало ${new Date().toUTCString()}`);
     let int = setInterval(() => {
-      let date = new Date();
-      console.log(date.toUTCString());
+      console.log(`В интервале ${new Date().toUTCString()}`);
     }, setIntervalStart);
     setTimeout(() => {
       clearInterval(int);
