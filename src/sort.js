@@ -20,36 +20,44 @@ process.argv.forEach((arg, index, array) => {
   }
 });
 
-const fileSort = (myDir, newDir) => {
+async function fileSort(myDir, newDir) {
   //читаем переданную директорую
   //проходимся по всем элементам в папке
   const syncDir = fs.readdirSync(myDir);
-  syncDir.forEach(file => {
-    let stat = fs.statSync(path.resolve(myDir, file));
-    //если элемент файл, создаем директорию по первой букве
-    if (stat.isFile()) {
-      promise(newDir, file)
-        .then(newPath => {
-          if (!isDirExist(newPath)) {
-            fs.mkdirSync(newPath);
-          }
-          return newPath;
-        })
-        .then(newPath => {
-          fs.copyFileSync(path.join(myDir, file), path.join(newPath, file));
-        })
-        .then(() => {
-          if (needDelete) {
-            fs.unlinkSync(path.join(myDir, file));
-          }
-        });
-    }
-    if (stat.isDirectory()) {
-      //если элемент это директория, вызываем заново функцию с новым путем
-      fileSort(path.join(myDir, file), newDir);
-    }
-  });
-};
+  let fin = await new Promise((resolve, reject) => {
+    resolve(
+      syncDir.forEach(file => {
+        let stat = fs.statSync(path.resolve(myDir, file));
+        //если элемент файл, создаем директорию по первой букве
+        if (stat.isFile()) {
+          promise(newDir, file)
+            .then(newPath => {
+              if (!isDirExist(newPath)) {
+                fs.mkdirSync(newPath);
+              }
+              return newPath;
+            })
+            .then(newPath => {
+              fs.copyFileSync(path.join(myDir, file), path.join(newPath, file));
+            })
+            .then(() => {
+              if (needDelete) {
+                fs.unlinkSync(path.join(myDir, file));
+              }
+            });
+        }
+        if (stat.isDirectory()) {
+          //если элемент это директория, вызываем заново функцию с новым путем
+          fileSort(path.join(myDir, file), newDir);
+        }
+      })
+    )
+  }).then(() => true);
+  if (needDelete && fin) {
+      fs.rmdirSync(myDir);
+  }
+}
+
 //проверка на существование
 function isDirExist(path) {
   return fs.existsSync(path);
