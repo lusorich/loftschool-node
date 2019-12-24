@@ -5,8 +5,6 @@ let myDir,
   newDir,
   needDelete = false;
 
-//Считываем через аргументы начальную и конечную папки, смотрим надо ли удалять начальную
-//создаем конечную папку
 process.argv.forEach((arg, index, array) => {
   if (arg === "--default") {
     myDir = array[index + 1];
@@ -21,14 +19,11 @@ process.argv.forEach((arg, index, array) => {
 });
 
 async function fileSort(myDir, newDir) {
-  //читаем переданную директорую
-  //проходимся по всем элементам в папке
   const syncDir = fs.readdirSync(myDir);
   let fin = await new Promise((resolve, reject) => {
     resolve(
       syncDir.forEach(file => {
         let stat = fs.statSync(path.resolve(myDir, file));
-        //если элемент файл, создаем директорию по первой букве
         if (stat.isFile()) {
           promise(newDir, file)
             .then(newPath => {
@@ -47,7 +42,6 @@ async function fileSort(myDir, newDir) {
             });
         }
         if (stat.isDirectory()) {
-          //если элемент это директория, вызываем заново функцию с новым путем
           fileSort(path.join(myDir, file), newDir);
         }
       })
@@ -58,7 +52,6 @@ async function fileSort(myDir, newDir) {
   }
 }
 
-//проверка на существование
 function isDirExist(path) {
   return fs.existsSync(path);
 }
