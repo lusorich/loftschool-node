@@ -1,9 +1,19 @@
 const fs = require("fs");
 const path = require("path");
+const { promisify } = require("util");
+const readdirAsync = promisify(fs.readdir);
+const mkdirAsync = promisify(fs.mkdir);
+const unlinkAsync = promisify(fs.unlink);
+const copyFileAsync = promisify(fs.copyFile);
+const statAsync = promisify(fs.stat);
+const rmdirAsync = promisify(fs.rmdir);
 
 let myDir,
   newDir,
-  needDelete = false;
+  needDelete = false,
+  stat,
+  file2,
+  b;
 
 process.argv.forEach((arg, index, array) => {
   if (arg === "--default") {
@@ -17,50 +27,31 @@ process.argv.forEach((arg, index, array) => {
     needDelete = true;
   }
 });
-
 async function fileSort(myDir, newDir) {
-  const syncDir = fs.readdirSync(myDir);
-  let fin = await new Promise((resolve, reject) => {
-    resolve(
-      syncDir.forEach(file => {
-        let stat = fs.statSync(path.resolve(myDir, file));
-        if (stat.isFile()) {
-          promise(newDir, file)
-            .then(newPath => {
-              if (!isDirExist(newPath)) {
-                fs.mkdirSync(newPath);
-              }
-              return newPath;
-            })
-            .then(newPath => {
-              fs.copyFileSync(path.join(myDir, file), path.join(newPath, file));
-            })
-            .then(() => {
-              if (needDelete) {
-                fs.unlinkSync(path.join(myDir, file));
-              }
-            });
-        }
-        if (stat.isDirectory()) {
-          fileSort(path.join(myDir, file), newDir);
-        }
-      })
-    )
-  }).then(() => true);
-  if (needDelete && fin) {
-      fs.rmdirSync(myDir);
+  const dir = await readdirAsync(myDir);
+  for (let file of dir) {
+    let newPath = path.join(newDir, path.basename(file)[0]);
+    let stat = await statAsync(path.resolve(myDir, file));
+    if (stat.isFile()) {
+      if (!isDirExist(newPath)) {
+        await mkdirAsync(newPath);
+      }
+      await copyFileAsync(path.join(myDir, file), path.join(newPath, file));
+      if (needDelete) {
+        await unlinkAsync(path.join(myDir, file));
+      }
+    }
+    if (stat.isDirectory()) {
+      await fileSort(path.join(myDir, file), newDir);
+    }
+  }
+  if (needDelete) {
+    rmdirAsync(myDir);
   }
 }
 
 function isDirExist(path) {
   return fs.existsSync(path);
 }
-
-const promise = (newDir, file) => {
-  return new Promise((resolve, reject) => {
-    let newPath = path.join(newDir, path.basename(file)[0]);
-    resolve(newPath);
-  });
-};
 
 fileSort(myDir, newDir);
