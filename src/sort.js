@@ -10,10 +10,7 @@ const rmdirAsync = promisify(fs.rmdir);
 
 let myDir,
   newDir,
-  needDelete = false,
-  stat,
-  file2,
-  b;
+  needDelete = false;
 
 process.argv.forEach((arg, index, array) => {
   if (arg === "--default") {
