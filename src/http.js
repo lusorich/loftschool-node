@@ -25,8 +25,8 @@ const promise = res => {
     }, setIntervalStart);
     setTimeout(() => {
       clearInterval(int);
-      console.log(`Конец ${new Date().toUTCString()}`);
-      resolve(res.end());
+      console.log(`Время отключения Конец ${new Date().toUTCString()}`);
+      resolve(res.end(`Конец ${new Date().toUTCString()}`));
     }, setIntervalStop);
   });
 };
