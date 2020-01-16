@@ -25,7 +25,7 @@ router.post('/', (request, response, next) => {
       message: JSON.parse(reqToJson).message
     })
     .write();
-  response.end();
+  response.redirect('/');
 });
 
 module.exports = router;

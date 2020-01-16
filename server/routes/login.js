@@ -24,7 +24,7 @@ router.post('/', (request, response, next) => {
       password: JSON.parse(reqToJson).password
     })
     .write();
-  response.end();
+  response.redirect('/');
 });
 
 module.exports = router;

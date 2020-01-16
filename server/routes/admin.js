@@ -26,7 +26,7 @@ router.post('/skills', (request, response, next) => {
       years: JSON.parse(reqToJson).years
     })
     .write();
-  response.end();
+  response.redirect('/');
 });
 
 router.post('/upload', (request, response, next) => {
@@ -41,7 +41,7 @@ router.post('/upload', (request, response, next) => {
       price: JSON.parse(reqToJson).price
     })
     .write();
-  response.end();
+  response.redirect('/');
 });
 
 module.exports = router;

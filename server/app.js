@@ -2,7 +2,8 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const path = require('path');
 const expressHbs = require('express-handlebars');
-const fileUpload = require('express-fileupload');
+const multer = require('express-multer');
+const upload = multer({ dest: 'uploads/' });
 
 const adminRoutes = require('./routes/admin');
 const loginRoutes = require('./routes/login');
