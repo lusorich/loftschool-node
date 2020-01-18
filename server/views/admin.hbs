@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Admin page</title>
+    <title>{{ pageTitle }}</title>
     <meta content="" name="author">
     <meta content="" name="description">
     <meta content="" name="keywords">
@@ -43,8 +43,9 @@
               <div class="form__btns form-skill__input-line">
                 <button class="button" type="submit">Сохранить</button>
               </div>
+              <div class="status">{{ skillStatus }}</div>
             </form>
-            <form class="form-upload" action="/admin/upload" method="POST" enctype="application/x-www-form-urlencoded">
+            <form class="form-upload" action="/admin/upload" method="POST" enctype="multipart/form-data">
               <div class="form-title">Добавить товар</div>
               <div class="form-upload__input-line">
                 <div class="form-upload__wraper">
@@ -62,6 +63,7 @@
               <div class="form-upload__input-line form-upload__input-line--btn">
                 <button class="button" type="submit">Добавить</button>
               </div>
+              <div class="status">{{ uploadStatus }}</div>
             </form>
           </div>
         </div>
