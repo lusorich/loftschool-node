@@ -55,19 +55,19 @@
         <div class="life__slogan">У музыки нет возраста и нации, <br/> однажды мы уйдём, а она останется.</div>
         <ul class="life__skills">
           <li class="life__skill">
-            <div class="life__skill-number">12</div>
+            <div class="life__skill-number">{{ skills.age }}</div>
             <div class="life__skill-text">Возраст начала занятий на скрипке</div>
           </li>
           <li class="life__skill">
-            <div class="life__skill-number">76</div>
+            <div class="life__skill-number">{{ skills.concerts }}</div>
             <div class="life__skill-text">Концертов отыграл</div>
           </li>
           <li class="life__skill">
-            <div class="life__skill-number">30</div>
+            <div class="life__skill-number">{{ skills.cities }}</div>
             <div class="life__skill-text">Максимальное число городов в туре</div>
           </li>
           <li class="life__skill">
-            <div class="life__skill-number">20</div>
+            <div class="life__skill-number">{{ skills.years}}</div>
             <div class="life__skill-text">Лет на сцене в качестве скрипача</div>
           </li>
         </ul><a class="life__link" href="http://">Читать историю</a>
@@ -78,78 +78,16 @@
         <div class="product__subtitle subtitle">Товары от студии Архипова</div>
         <h2 class="product__title title">Мой личный бренд</h2>
         <ul class="product__list">
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work1.jpg">
+          {{#each products}}
+          <li class="product__item"><img class="product__img" src={{ this.photo }}>
             <div class="product__hover">
               <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
+                <div class="product__name">{{ this.name }}</div>
+                <div class="product__price"> {{ this.price }}</div>
               </div>
             </div>
           </li>
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work2.jpg">
-            <div class="product__hover">
-              <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
-              </div>
-            </div>
-          </li>
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work3.jpg">
-            <div class="product__hover">
-              <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
-              </div>
-            </div>
-          </li>
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work4.jpg">
-            <div class="product__hover">
-              <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
-              </div>
-            </div>
-          </li>
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work5.jpg">
-            <div class="product__hover">
-              <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
-              </div>
-            </div>
-          </li>
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work6.jpg">
-            <div class="product__hover">
-              <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
-              </div>
-            </div>
-          </li>
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work7.jpg">
-            <div class="product__hover">
-              <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
-              </div>
-            </div>
-          </li>
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work8.jpg">
-            <div class="product__hover">
-              <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
-              </div>
-            </div>
-          </li>
-          <li class="product__item"><img class="product__img" src="./assets/img/products/Work9.jpg">
-            <div class="product__hover">
-              <div class="product__description">
-                <div class="product__name">Вино вдохновение</div>
-                <div class="product__price">$ 600</div>
-              </div>
-            </div>
-          </li>
+          {{/each}}
         </ul>
       </div>
     </section>
