@@ -3,10 +3,10 @@ const router = express.Router();
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
-const adapter = new FileSync('main.json');
+const adapter = new FileSync('data.json');
 const db = low(adapter);
 
-db.defaults({ userData: [] }).write();
+db.defaults({ userData: [] });
 
 router.get('/', (request, response, next) => {
   response.status(200).render('index', {
